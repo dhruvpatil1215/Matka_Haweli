@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Matka Haweli — A premium Indian restaurant in Virar West. Clay-pot biryanis, charcoal kebabs and slow-burnt spices. Taste the Fire.">
+    <title>Matka Haweli | Taste The Fire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Floating Ember Particles -->
+    <div id="ember-container" aria-hidden="true"></div>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="navLogo">
+                <svg class="flame-icon" viewBox="0 0 32 32" width="28" height="28">
+                    <path d="M16 2C16 2 8 12 8 20C8 24.4 11.6 28 16 28C20.4 28 24 24.4 24 20C24 12 16 2 16 2ZM16 25C13.2 25 11 22.8 11 20C11 16.8 14 12 16 9C18 12 21 16.8 21 20C21 22.8 18.8 25 16 25Z" fill="currentColor"/>
+                </svg>
+                <span class="nav-brand-text">Matka <em>Haweli</em></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link active">HOME</a></li>
+                <li><a href="#specials" class="nav-link">SPECIALS</a></li>
+                <li><a href="#menu" class="nav-link">MENU</a></li>
+                <li><a href="#gallery" class="nav-link">GALLERY</a></li>
+                <li><a href="#about" class="nav-link">ABOUT</a></li>
+                <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            </ul>
+            <a href="#contact" class="nav-reserve-btn" id="navReserve">RESERVE</a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section id="home" class="hero">
+        <div class="hero-fire-bg">
+            <img src="assets/fire-bg.png" alt="" aria-hidden="true" class="fire-image">
+            <div class="fire-overlay"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-est" data-scroll="fade-down">
+                <span class="est-line"></span>
+                <span class="est-text">EST. 2014 &mdash; VIRAR WEST</span>
+                <span class="est-line"></span>
+            </div>
+
+            <div class="hero-flame-icon" data-scroll="zoom">
+                <svg viewBox="0 0 48 48" width="48" height="48">
+                    <path d="M24 4C24 4 12 18 12 28C12 34.6 17.4 40 24 40C30.6 40 36 34.6 36 28C36 18 24 4 24 4ZM24 36C19.6 36 16 32.4 16 28C16 23.6 20 16 24 11C28 16 32 23.6 32 28C32 32.4 28.4 36 24 36Z" fill="url(#flameGrad)"/>
+                    <defs>
+                        <linearGradient id="flameGrad" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#FF6B35"/>
+                            <stop offset="100%" stop-color="#C0392B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <h1 class="hero-title" data-scroll="title">
+                <span class="title-matka">MATKA</span>
+                <span class="title-haweli">HAWELI</span>
+            </h1>
+
+            <div class="hero-tagline" data-scroll="fade-up">
+                <span class="tagline-dot"></span>
+                <span class="tagline-text">TASTE THE FIRE</span>
+                <span class="tagline-sparkle">✦</span>
+            </div>
+
+            <p class="hero-desc" data-scroll="fade-up" data-delay="100">
+                A regal courtyard of clay-pot biryanis, charcoal kebabs and slow-burnt spices &mdash; where
+                every dish tells a story of flame.
+            </p>
+
+            <div class="hero-buttons" data-scroll="fade-up" data-delay="200">
+                <a href="#menu" class="btn-primary" id="viewMenuBtn">
+                    <span>VIEW MENU</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C12 2 7 8 7 13C7 16.3 9.7 19 13 19C16.3 19 19 16.3 19 13C19 8 12 2 12 2Z"/></svg>
+                </a>
+                <a href="#contact" class="btn-outline" id="reserveTableBtn">RESERVE A TABLE</a>
+            </div>
+
+            <div class="hero-scroll" data-scroll="fade-up" data-delay="400">
+                <span class="scroll-text">SCROLL</span>
+                <svg class="scroll-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 10l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SPECIALS SECTION ========== -->
+    <section id="specials" class="section specials-section">
+        <div class="container">
+            <div class="section-header" data-scroll="fade-up">
+                <span class="section-label">OUR SIGNATURE</span>
+                <h2 class="section-title">Flame-Forged <span class="text-fire">Specials</span></h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="specials-grid">
+                <div class="special-card" data-scroll="fade-up" data-delay="0">
+                    <div class="card-glow"></div>
+                    <div class="card-number">01</div>
+                    <div class="card-emoji">🍛</div>
+                    <h3>Matka Gosht</h3>
+                    <p>Tender lamb slow-cooked 8 hours in a sealed clay pot with aromatic spices, saffron, and caramelized onions.</p>
+                    <div class="card-bottom">
+                        <span class="card-price">₹450</span>
+                        <span class="card-badge">Chef's Special</span>
+                    </div>
+                </div>
+
+                <div class="special-card" data-scroll="fade-up" data-delay="100">
+                    <div class="card-glow"></div>
+                    <div class="card-number">02</div>
+                    <div class="card-emoji">🥘</div>
+                    <h3>Handi Paneer</h3>
+                    <p>Cottage cheese in rich, smoky tomato-cashew gravy, finished with fresh cream and kasuri methi.</p>
+                    <div class="card-bottom">
+                        <span class="card-price">₹320</span>
+                        <span class="card-badge">Bestseller</span>
+                    </div>
+                </div>
+
+                <div class="special-card" data-scroll="fade-up" data-delay="200">
+                    <div class="card-glow"></div>
+                    <div class="card-number">03</div>
+                    <div class="card-emoji">🍗</div>
+                    <h3>Tandoori Murgh</h3>
+                    <p>Free-range chicken marinated in yogurt and 24 spices, charred in our traditional clay tandoor.</p>
+                    <div class="card-bottom">
+                        <span class="card-price">₹380</span>
+                        <span class="card-badge">Most Popular</span>
+                    </div>
+                </div>
+
+                <div class="special-card" data-scroll="fade-up" data-delay="300">
+                    <div class="card-glow"></div>
+                    <div class="card-number">04</div>
+                    <div class="card-emoji">🍲</div>
+                    <h3>Dal Matka</h3>
+                    <p>Black lentils slow-simmered overnight in a clay matka, enriched with butter, cream, and smoky char.</p>
+                    <div class="card-bottom">
+                        <span class="card-price">₹260</span>
+                        <span class="card-badge">Signature</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MENU SECTION ========== -->
+    <section id="menu" class="section menu-section">
+        <div class="container">
+            <div class="section-header" data-scroll="fade-up">
+                <span class="section-label">OUR MENU</span>
+                <h2 class="section-title">Chrispy Cheese Vadapav <span class="text-fire">&</span> Tandoor Vadapav</h2>
+                <div class="title-underline"></div>
+                <p class="section-subtitle">जसा वडा आणि पाव — तस तुझ आणि माझ नात ♥</p>
+            </div>
+
+            <!-- Menu Category Tabs -->
+            <div class="menu-tabs" data-scroll="fade-up" data-delay="100">
+                <button class="menu-tab active" data-cat="all">All</button>
+                <button class="menu-tab" data-cat="vadapav">🍔 Vadapav</button>
+                <button class="menu-tab" data-cat="chrispy">🔥 Chrispy</button>
+                <button class="menu-tab" data-cat="tandoor">♨️ Tandoor</button>
+                <button class="menu-tab" data-cat="misal">🥘 Misal</button>
+                <button class="menu-tab" data-cat="vada">🧆 Vada</button>
+                <button class="menu-tab" data-cat="chai">☕ Chai</button>
+            </div>
+
+            <!-- Menu Categories -->
+            <div class="menu-categories" id="menuCategories">
+
+                <!-- VADAPAV -->
+                <div class="menu-category" data-category="vadapav" data-scroll="fade-up">
+                    <div class="cat-header">
+                        <span class="cat-icon">🍔</span>
+                        <h3>Vadapav</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Regular Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹20</span></div>
+                        <div class="mi"><span class="mi-name">Chura Pav</span><span class="mi-dots"></span><span class="mi-price">₹15</span></div>
+                        <div class="mi"><span class="mi-name">Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹40</span></div>
+                        <div class="mi"><span class="mi-name">Schezwan Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹40</span></div>
+                        <div class="mi"><span class="mi-name">Schezwan Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹50</span></div>
+                        <div class="mi"><span class="mi-name">Mayonnaise Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹40</span></div>
+                        <div class="mi"><span class="mi-name">Mayonnaise Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹55</span></div>
+                        <div class="mi"><span class="mi-name">Mayonnaise Che. Sch. Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                    </div>
+                </div>
+
+                <!-- CHRISPY VADA PAV -->
+                <div class="menu-category" data-category="chrispy" data-scroll="fade-up" data-delay="100">
+                    <div class="cat-header">
+                        <span class="cat-icon">🔥</span>
+                        <h3>Chrispy Vada Pav</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Chrispy Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹50</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Schezwan Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Sch. Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹70</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Mayonnaise Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy May. Che. Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹70</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy May. Che. Sch. Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹75</span></div>
+                    </div>
+                </div>
+
+                <!-- TANDOOR VADA PAV -->
+                <div class="menu-category" data-category="tandoor" data-scroll="fade-up" data-delay="200">
+                    <div class="cat-header">
+                        <span class="cat-icon">♨️</span>
+                        <h3>Tandoor Vada Pav</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Tandoor Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹40</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Schezwan Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹55</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Sch. Cheese Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹65</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Mayonnaise Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹55</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor May. Che. Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹65</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor May. Che. Sch. Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹70</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Paneer Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Paneer Cheese Sch Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹70</span></div>
+                        <div class="mi"><span class="mi-name">Tandoor Less Vadapav</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                    </div>
+                </div>
+
+                <!-- MISAL -->
+                <div class="menu-category" data-category="misal" data-scroll="fade-up">
+                    <div class="cat-header">
+                        <span class="cat-icon">🥘</span>
+                        <h3>Misal</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Puneri Misal</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Puneri Vada Misal</span><span class="mi-dots"></span><span class="mi-price">₹60</span></div>
+                        <div class="mi"><span class="mi-name">Puneri Vada Misal Pav</span><span class="mi-dots"></span><span class="mi-price">₹70</span></div>
+                        <div class="mi"><span class="mi-name">Puneri Vada Cheese Misal Pav</span><span class="mi-dots"></span><span class="mi-price">₹85</span></div>
+                    </div>
+                </div>
+
+                <!-- VARIETY OF VADA -->
+                <div class="menu-category" data-category="vada" data-scroll="fade-up" data-delay="100">
+                    <div class="cat-header">
+                        <span class="cat-icon">🧆</span>
+                        <h3>Variety of Vada</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Vada Single</span><span class="mi-dots"></span><span class="mi-price">₹15</span></div>
+                        <div class="mi"><span class="mi-name">Cheese Vada Single</span><span class="mi-dots"></span><span class="mi-price">₹30</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Vada Single</span><span class="mi-dots"></span><span class="mi-price">₹25</span></div>
+                        <div class="mi"><span class="mi-name">Chrispy Cheese Vada Single</span><span class="mi-dots"></span><span class="mi-price">₹35</span></div>
+                    </div>
+                </div>
+
+                <!-- VARIETY OF CHAI -->
+                <div class="menu-category" data-category="chai" data-scroll="fade-up" data-delay="200">
+                    <div class="cat-header">
+                        <span class="cat-icon">☕</span>
+                        <h3>Variety of Chai</h3>
+                    </div>
+                    <div class="cat-items">
+                        <div class="mi"><span class="mi-name">Tandoori Chai Kulhad</span><span class="mi-dots"></span><span class="mi-price">₹30</span></div>
+                        <div class="mi"><span class="mi-name">Kulhad Chai</span><span class="mi-dots"></span><span class="mi-price">₹15</span></div>
+                        <div class="mi"><span class="mi-name">Regular Chai</span><span class="mi-dots"></span><span class="mi-price">₹10</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== GALLERY SECTION ========== -->
+    <section id="gallery" class="section gallery-section">
+        <div class="container">
+            <div class="section-header" data-scroll="fade-up">
+                <span class="section-label">AMBIENCE</span>
+                <h2 class="section-title">Step Into The <span class="text-fire">Haweli</span></h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-large" data-scroll="fade-up" data-delay="0">
+                    <img src="assets/interior.png" alt="Matka Haweli Interior" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-label">Royal Dining Hall</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-scroll="fade-up" data-delay="100">
+                    <img src="assets/thali.png" alt="Traditional Thali" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-label">The Grand Thali</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-scroll="fade-up" data-delay="200">
+                    <img src="assets/tandoori.png" alt="Tandoori Platter" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-label">Tandoori Classics</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-scroll="fade-up" data-delay="300">
+                    <img src="assets/matka-hero.png" alt="Matka Cooking" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-label">The Matka Tradition</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section id="about" class="section about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-img-col" data-scroll="slide-right">
+                    <div class="about-img-wrapper">
+                        <img src="assets/matka-hero.png" alt="Matka Cooking Tradition" loading="lazy">
+                        <div class="about-badge">
+                            <span class="badge-num">10+</span>
+                            <span class="badge-text">Years of<br>Tradition</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content" data-scroll="slide-left">
+                    <span class="section-label">OUR STORY</span>
+                    <h2 class="section-title">A Legacy Forged<br>in <span class="text-fire">Flame</span></h2>
+                    <div class="title-underline left"></div>
+                    <p>At Matka Haweli, we believe the finest flavors are born from patience and tradition. Our chefs craft each dish in handcrafted clay matkas, slow-cooked over open flames — a technique passed down through generations.</p>
+                    <p>The earthen pot infuses every morsel with a smoky, rustic essence that no modern cookware can replicate. This is not just dining — it's a journey through India's rich culinary heritage.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-num" data-count="50">0</span><span class="stat-suffix">+</span>
+                            <span class="stat-label">Signature Dishes</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-num" data-count="15">0</span><span class="stat-suffix">K+</span>
+                            <span class="stat-label">Happy Guests</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-num" data-count="4">0</span><span class="stat-suffix">.8★</span>
+                            <span class="stat-label">Google Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIAL ========== -->
+    <section class="section testimonial-section">
+        <div class="container">
+            <div class="testimonial-card" data-scroll="fade-up">
+                <div class="quote-mark">"</div>
+                <blockquote>The flavors at Matka Haweli transported me straight to the royal kitchens of Rajasthan. The Matka Gosht is deeply aromatic and soul-warming — unlike anything I've ever tasted.</blockquote>
+                <div class="testimonial-author">
+                    <span class="author-name">— Priya Sharma</span>
+                    <span class="author-role">Food Critic, Mumbai</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONTACT SECTION ========== -->
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <div class="section-header" data-scroll="fade-up">
+                <span class="section-label">VISIT US</span>
+                <h2 class="section-title">Reserve Your <span class="text-fire">Table</span></h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info" data-scroll="slide-right">
+                    <p class="contact-intro">Experience the warmth of Matka Haweli. Walk in or reserve your spot for an unforgettable evening.</p>
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div><strong>Location</strong><p>Matka Haweli, Main Road, Virar West, Maharashtra 401303</p></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <div><strong>Phone</strong><p>+91 98765 43210</p></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🕐</div>
+                        <div><strong>Hours</strong><p>Mon–Sun: 11:00 AM – 11:00 PM</p></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📧</div>
+                        <div><strong>Email</strong><p>hello@matkahaweli.com</p></div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrap" data-scroll="slide-left">
+                    <form class="reservation-form" id="reservationForm">
+                        <h3>Make a Reservation</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fname">Full Name</label>
+                                <input type="text" id="fname" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fphone">Phone</label>
+                                <input type="tel" id="fphone" placeholder="+91 XXXXX XXXXX" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fdate">Date</label>
+                                <input type="date" id="fdate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ftime">Time</label>
+                                <input type="time" id="ftime" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fguests">Number of Guests</label>
+                            <select id="fguests" required>
+                                <option value="">Select guests</option>
+                                <option>1-2 Guests</option>
+                                <option>3-4 Guests</option>
+                                <option>5-6 Guests</option>
+                                <option>7-10 Guests</option>
+                                <option>10+ (Party)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fmsg">Special Requests</label>
+                            <textarea id="fmsg" rows="3" placeholder="Dietary requirements or special occasions..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary btn-full">
+                            <span>CONFIRM RESERVATION</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <svg class="flame-icon" viewBox="0 0 32 32" width="24" height="24">
+                        <path d="M16 2C16 2 8 12 8 20C8 24.4 11.6 28 16 28C20.4 28 24 24.4 24 20C24 12 16 2 16 2ZM16 25C13.2 25 11 22.8 11 20C11 16.8 14 12 16 9C18 12 21 16.8 21 20C21 22.8 18.8 25 16 25Z" fill="currentColor"/>
+                    </svg>
+                    <div>
+                        <span class="footer-name">Matka Haweli</span>
+                        <span class="footer-sub">Flame-Kissed Flavors Since 2014</span>
+                    </div>
+                </div>
+                <div class="footer-socials">
+                    <a href="#" class="social-link" aria-label="Instagram">IG</a>
+                    <a href="#" class="social-link" aria-label="Facebook">FB</a>
+                    <a href="#" class="social-link" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+            <div class="footer-line"></div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Matka Haweli. All rights reserved.</p>
+                <p class="crafted">Crafted with 🔥 and tradition</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

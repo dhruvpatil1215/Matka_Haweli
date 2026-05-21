@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SteelCraft | Premium Kitchen Essentials</title>
+<meta name="description" content="Premium stainless steel kitchen essentials for the modern home chef.">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--card:#1a1a25;--steel:#c0c5ce;--steel-light:#e8eaed;--accent:#7eb8da;--accent2:#5a9fc2;--gold:#d4a853;--text:#e0e0e8;--text-muted:#8a8a9a;--radius:16px}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* Navbar */
+.navbar{position:fixed;top:0;left:0;width:100%;z-index:100;padding:20px 60px;display:flex;justify-content:space-between;align-items:center;transition:all .4s ease;backdrop-filter:blur(0px);background:transparent}
+.navbar.scrolled{background:rgba(10,10,15,.92);backdrop-filter:blur(16px);padding:14px 60px;box-shadow:0 2px 30px rgba(0,0,0,.4)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--steel-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:.95rem;font-weight:400;color:var(--text-muted);transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width .3s}
+.nav-links a:hover{color:var(--steel-light)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff!important;padding:10px 24px;border-radius:30px;font-weight:500;transition:transform .3s,box-shadow .3s}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(126,184,218,.3)}
+.nav-cta::after{display:none!important}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 20px 80px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(126,184,218,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(212,168,83,.05) 0%,transparent 50%)}
+.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(126,184,218,.12),transparent 70%);top:10%;left:50%;transform:translateX(-50%);animation:glowPulse 4s ease-in-out infinite;pointer-events:none}
+@keyframes glowPulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.15)}}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:30px;border:1px solid rgba(126,184,218,.25);background:rgba(126,184,218,.06);font-size:.85rem;color:var(--accent);margin-bottom:28px;animation:fadeInDown .8s ease}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:700;line-height:1.1;margin-bottom:24px;animation:fadeInUp .8s ease .2s both}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.15rem;color:var(--text-muted);max-width:560px;margin:0 auto 40px;animation:fadeInUp .8s ease .4s both}
+.hero-btns{display:flex;gap:16px;justify-content:center;animation:fadeInUp .8s ease .6s both}
+.btn-primary{padding:14px 36px;border-radius:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:all .3s}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(126,184,218,.35)}
+.btn-outline{padding:14px 36px;border-radius:30px;border:1px solid rgba(192,197,206,.3);background:transparent;color:var(--steel-light);font-weight:500;font-size:1rem;cursor:pointer;transition:all .3s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px)}
+
+/* Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+.reveal.active{opacity:1;transform:translateY(0)}
+
+/* Stats */
+.stats{display:flex;justify-content:center;gap:60px;padding:60px 20px;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.stat{text-align:center}
+.stat h3{font-size:2.4rem;font-weight:700;background:linear-gradient(135deg,var(--steel-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat p{color:var(--text-muted);font-size:.9rem;margin-top:4px}
+
+/* Section Styles */
+.section{padding:100px 60px}
+.section-label{font-size:.8rem;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:20px}
+.section-desc{color:var(--text-muted);max-width:520px;font-size:1.05rem}
+
+/* Categories */
+.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:50px}
+.cat-card{background:var(--card);border-radius:var(--radius);padding:40px 30px;border:1px solid rgba(255,255,255,.04);transition:all .4s ease;cursor:pointer;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(126,184,218,.06),transparent);opacity:0;transition:opacity .4s}
+.cat-card:hover{transform:translateY(-8px);border-color:rgba(126,184,218,.2);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.cat-card:hover::before{opacity:1}
+.cat-icon{font-size:2.5rem;margin-bottom:18px;display:block}
+.cat-card h3{font-size:1.2rem;font-weight:600;margin-bottom:8px}
+.cat-card p{color:var(--text-muted);font-size:.9rem;line-height:1.5}
+
+/* Products */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:50px}
+.product-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.04);transition:all .4s;cursor:pointer}
+.product-card:hover{transform:translateY(-6px);border-color:rgba(126,184,218,.15);box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.product-img{height:240px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.product-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,var(--card));pointer-events:none}
+.product-img .shine{position:absolute;width:60px;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:skewX(-15deg) translateX(-200px);animation:shine 4s infinite}
+@keyframes shine{0%{transform:skewX(-15deg) translateX(-200px)}100%{transform:skewX(-15deg) translateX(400px)}}
+.product-info{padding:24px}
+.product-info h3{font-size:1.1rem;font-weight:600;margin-bottom:6px}
+.product-info .price{font-size:1.15rem;font-weight:700;color:var(--accent);margin-bottom:8px}
+.product-info .desc{color:var(--text-muted);font-size:.85rem}
+.product-tag{position:absolute;top:14px;right:14px;background:rgba(126,184,218,.15);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:500;z-index:2}
+
+/* Features */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:28px;margin-top:50px}
+.feature{text-align:center;padding:40px 24px}
+.feature-icon{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,rgba(126,184,218,.1),rgba(126,184,218,.02));display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 18px;border:1px solid rgba(126,184,218,.1);transition:all .3s}
+.feature:hover .feature-icon{transform:scale(1.1);border-color:rgba(126,184,218,.3);box-shadow:0 8px 25px rgba(126,184,218,.15)}
+.feature h3{font-size:1.05rem;font-weight:600;margin-bottom:8px}
+.feature p{color:var(--text-muted);font-size:.88rem}
+
+/* Testimonials */
+.testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:50px}
+.testimonial{background:var(--card);border-radius:var(--radius);padding:32px;border:1px solid rgba(255,255,255,.04)}
+.testimonial .stars{color:var(--gold);font-size:1rem;margin-bottom:14px}
+.testimonial blockquote{font-size:.95rem;color:var(--text-muted);line-height:1.7;font-style:italic;margin-bottom:18px}
+.testimonial .author{font-weight:600;font-size:.9rem}
+.testimonial .role{color:var(--text-muted);font-size:.8rem}
+
+/* CTA */
+.cta-section{text-align:center;padding:100px 20px;position:relative}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(126,184,218,.08),transparent 70%)}
+.cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:16px}
+.cta-section p{color:var(--text-muted);margin-bottom:36px;font-size:1.05rem}
+
+/* Footer */
+footer{background:var(--surface);padding:60px 60px 30px;border-top:1px solid rgba(255,255,255,.05)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--steel-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.footer-desc{color:var(--text-muted);font-size:.88rem;line-height:1.6}
+footer h4{font-size:.9rem;font-weight:600;margin-bottom:14px;color:var(--steel-light)}
+footer ul{list-style:none}
+footer ul li{margin-bottom:8px}
+footer ul a{color:var(--text-muted);font-size:.88rem;transition:color .3s}
+footer ul a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:20px;text-align:center;color:var(--text-muted);font-size:.82rem}
+
+/* Floating particles */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.particle{position:absolute;width:3px;height:3px;background:rgba(126,184,218,.2);border-radius:50%;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) rotate(720deg);opacity:0}}
+
+/* Mobile */
+@media(max-width:768px){
+.navbar{padding:16px 20px}
+.nav-links{display:none}
+.section{padding:60px 20px}
+.stats{flex-wrap:wrap;gap:30px}
+.footer-grid{grid-template-columns:1fr 1fr}
+.hero-btns{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo">SteelCraft</a>
+  <div class="nav-links">
+    <a href="#categories">Categories</a>
+    <a href="#products">Products</a>
+    <a href="#features">Why Us</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact" class="nav-cta">Shop Now</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Premium Stainless Steel Collection</div>
+    <h1>Crafted for the <span>Modern Kitchen</span></h1>
+    <p>Discover our curated collection of premium stainless steel kitchen essentials — built to last, designed to inspire.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+      <button class="btn-outline" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Learn More</button>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats reveal">
+  <div class="stat"><h3>15K+</h3><p>Happy Customers</p></div>
+  <div class="stat"><h3>200+</h3><p>Products</p></div>
+  <div class="stat"><h3>50+</h3><p>Years Legacy</p></div>
+  <div class="stat"><h3>99%</h3><p>Satisfaction</p></div>
+</div>
+
+<!-- Categories -->
+<section class="section" id="categories">
+  <div class="reveal">
+    <p class="section-label">Browse</p>
+    <h2 class="section-title">Kitchen Categories</h2>
+    <p class="section-desc">Everything you need for a fully equipped kitchen, crafted from the finest steel.</p>
+  </div>
+  <div class="categories">
+    <div class="cat-card reveal"><span class="cat-icon">🍳</span><h3>Cookware</h3><p>Kadhai, tawa, fry pans & saucepans for everyday cooking.</p></div>
+    <div class="cat-card reveal"><span class="cat-icon">🥘</span><h3>Serving Ware</h3><p>Bowls, plates, serving spoons & elegant handi sets.</p></div>
+    <div class="cat-card reveal"><span class="cat-icon">🫙</span><h3>Storage</h3><p>Airtight containers, dabba sets & masala boxes.</p></div>
+    <div class="cat-card reveal"><span class="cat-icon">🥤</span><h3>Drinkware</h3><p>Glasses, tumblers, jugs & insulated bottles.</p></div>
+    <div class="cat-card reveal"><span class="cat-icon">🔪</span><h3>Utensils</h3><p>Ladles, spatulas, tongs & chimta for daily use.</p></div>
+    <div class="cat-card reveal"><span class="cat-icon">🧹</span><h3>Accessories</h3><p>Strainers, graters, peelers & kitchen tools.</p></div>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section" id="products" style="background:var(--surface)">
+  <div class="reveal">
+    <p class="section-label">Collection</p>
+    <h2 class="section-title">Bestselling Products</h2>
+    <p class="section-desc">Our most loved steel kitchen essentials, trusted by thousands.</p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-img"><span class="product-tag">Bestseller</span>🍳<div class="shine"></div></div>
+      <div class="product-info"><h3>Triply Steel Kadhai</h3><p class="price">₹1,499</p><p class="desc">3-layer bonded steel, even heat distribution, induction ready.</p></div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img"><span class="product-tag">New</span>🫕<div class="shine"></div></div>
+      <div class="product-info"><h3>Hammered Handi Set</h3><p class="price">₹2,199</p><p class="desc">Traditional hammered finish, set of 3, with steel lids.</p></div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img"><span class="product-tag">Popular</span>🫙<div class="shine"></div></div>
+      <div class="product-info"><h3>Airtight Container Set</h3><p class="price">₹899</p><p class="desc">Set of 5, stackable design, keeps food fresh longer.</p></div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">🥤<div class="shine"></div></div>
+      <div class="product-info"><h3>Copper-Bottom Tumbler</h3><p class="price">₹349</p><p class="desc">300ml capacity, copper base for health benefits.</p></div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img"><span class="product-tag">Premium</span>🍽️<div class="shine"></div></div>
+      <div class="product-info"><h3>Dinner Set – 24 Pc</h3><p class="price">₹3,499</p><p class="desc">Complete family set with plates, bowls, glasses & spoons.</p></div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">🔪<div class="shine"></div></div>
+      <div class="product-info"><h3>Kitchen Tool Set</h3><p class="price">₹699</p><p class="desc">6-piece set with stand: ladle, turner, masher & more.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="reveal">
+    <p class="section-label">Why Choose Us</p>
+    <h2 class="section-title">Built Different</h2>
+    <p class="section-desc">Every piece is crafted with precision and care.</p>
+  </div>
+  <div class="features">
+    <div class="feature reveal"><div class="feature-icon">⚙️</div><h3>Food-Grade Steel</h3><p>304 & 18/8 grade stainless steel, 100% safe and rust-free.</p></div>
+    <div class="feature reveal"><div class="feature-icon">🔥</div><h3>All Cooktop Ready</h3><p>Works on gas, induction, electric & ceramic cooktops.</p></div>
+    <div class="feature reveal"><div class="feature-icon">♻️</div><h3>Eco-Friendly</h3><p>Durable, reusable, zero plastic — better for the planet.</p></div>
+    <div class="feature reveal"><div class="feature-icon">🚚</div><h3>Free Delivery</h3><p>Free shipping on orders above ₹999 across India.</p></div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="reviews" style="background:var(--surface)">
+  <div class="reveal">
+    <p class="section-label">Testimonials</p>
+    <h2 class="section-title">What Our Customers Say</h2>
+  </div>
+  <div class="testimonials">
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <blockquote>"The triply kadhai is absolutely amazing. Heats evenly, food never sticks, and it looks gorgeous in my kitchen!"</blockquote>
+      <p class="author">Priya Sharma</p><p class="role">Home Chef, Mumbai</p>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Best steel containers I've ever bought. Airtight seal keeps everything fresh. Already ordered a second set!"</blockquote>
+      <p class="author">Rahul Verma</p><p class="role">Customer, Delhi</p>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Replaced all our plastic with SteelCraft. The dinner set is premium quality — feels like a luxury brand at half the price."</blockquote>
+      <p class="author">Anita Desai</p><p class="role">Homemaker, Pune</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal" id="contact">
+  <h2>Ready to Upgrade Your Kitchen?</h2>
+  <p>Join 15,000+ happy customers who made the switch to premium steel.</p>
+  <button class="btn-primary" style="font-size:1.1rem;padding:16px 44px">Shop the Full Collection →</button>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div><p class="footer-brand">SteelCraft</p><p class="footer-desc">Premium stainless steel kitchen essentials, crafted with tradition and designed for the modern home.</p></div>
+    <div><h4>Shop</h4><ul><li><a href="#">Cookware</a></li><li><a href="#">Serving Ware</a></li><li><a href="#">Storage</a></li><li><a href="#">Drinkware</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#">FAQs</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Warranty</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2026 SteelCraft. All rights reserved. Crafted with ❤️ in India.</div>
+</footer>
+
+<script>
+// Particles
+(function(){const c=document.getElementById('particles');for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*8+'s';p.style.width=p.style.height=(2+Math.random()*3)+'px';c.appendChild(p)}})();
+
+// Navbar scroll
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60)});
+
+// Reveal on scroll
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('active');observer.unobserve(e.target)}})},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Counter animation for stats
+function animateCounters(){document.querySelectorAll('.stat h3').forEach(el=>{const text=el.textContent;const num=parseInt(text.replace(/[^0-9]/g,''));const suffix=text.replace(/[0-9]/g,'');const dur=1500;const start=performance.now();const step=ts=>{const p=Math.min((ts-start)/dur,1);const ease=1-Math.pow(1-p,3);el.textContent=Math.floor(ease*num)+suffix;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
+const statObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounters();statObs.unobserve(e.target)}})},{threshold:.5});
+document.querySelector('.stats')&&statObs.observe(document.querySelector('.stats'));
+
+// Smooth hover tilt on product cards
+document.querySelectorAll('.product-card').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`});card.addEventListener('mouseleave',()=>{card.style.transform=''})});
+</script>
+</body>
+</html>

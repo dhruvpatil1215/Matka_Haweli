@@ -1,0 +1,22 @@
+{
+  "name": "matka-haweli-react",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "firebase": "^12.13.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  }
+}
