@@ -131,34 +131,7 @@ export default function AdminDashboard() {
       }
 
       setOrders(fetchedOrders);
-
-      // Calculate stats
-      const startOfToday = new Date();
-      startOfToday.setHours(0, 0, 0, 0);
-
-      let activeCount = 0;
-      let todaySales = 0;
-      let todayCompleted = 0;
-
-      fetchedOrders.forEach(o => {
-        const orderDate = new Date(o.created_at);
-        const isActive = ['pending', 'confirmed', 'preparing', 'ready'].includes(o.status);
-
-        if (isActive) {
-          activeCount++;
-        }
-
-        if (o.status === 'delivered' && orderDate >= startOfToday) {
-          todayCompleted++;
-          todaySales += Number(o.total_amount || 0);
-        }
-      });
-
-      setStats({
-        activeCount,
-        todaySales,
-        todayCompleted
-      });
+      recalculateStats(fetchedOrders);
 
     } catch (err) {
       console.error('Admin fetch error:', err);
@@ -167,6 +140,36 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   }
+
+  // Recalculate dashboard statistics based on order list
+  const recalculateStats = (ordersList) => {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    let activeCount = 0;
+    let todaySales = 0;
+    let todayCompleted = 0;
+
+    ordersList.forEach(o => {
+      const orderDate = new Date(o.created_at);
+      const isActive = ['pending', 'confirmed', 'preparing', 'ready'].includes(o.status);
+
+      if (isActive) {
+        activeCount++;
+      }
+
+      if (o.status === 'delivered' && orderDate >= startOfToday) {
+        todayCompleted++;
+        todaySales += Number(o.total_amount || 0);
+      }
+    });
+
+    setStats({
+      activeCount,
+      todaySales,
+      todayCompleted
+    });
+  };
 
   // Load orders on authentication
   useEffect(() => {
@@ -207,7 +210,15 @@ export default function AdminDashboard() {
       if (error) throw error;
 
       addToast(`Order status updated to ${newStatus.toUpperCase()}`, 'success');
-      // Local state will update via realtime listener
+      
+      // Update local state immediately so that today's earnings and counts change instantly
+      setOrders(prevOrders => {
+        const updated = prevOrders.map(o => 
+          o.id === orderId ? { ...o, status: newStatus } : o
+        );
+        recalculateStats(updated);
+        return updated;
+      });
     } catch (err) {
       console.error('Update status error:', err);
       addToast(`Error updating status: ${err.message}`, 'error');
