@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { OrderProvider } from './context/OrderContext';
 import { ToastProvider } from './context/ToastContext';
@@ -16,12 +17,45 @@ import LoginModal from './components/LoginModal';
 import OrderPanel from './components/OrderPanel';
 import OrderButton from './components/OrderButton';
 import OrderHistoryModal from './components/OrderHistoryModal';
+import AdminDashboard from './components/AdminDashboard';
 
 function AppContent() {
   const { loading } = useAuth();
+  const [isAdminRoute, setIsAdminRoute] = useState(window.location.pathname === '/admin');
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setIsAdminRoute(window.location.pathname === '/admin');
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+
+    // Listen to pushState/replaceState calls
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function(...args) {
+      originalPushState.apply(this, args);
+      handleLocationChange();
+    };
+
+    const originalReplaceState = window.history.replaceState;
+    window.history.replaceState = function(...args) {
+      originalReplaceState.apply(this, args);
+      handleLocationChange();
+    };
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+    };
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
+  }
+
+  if (isAdminRoute) {
+    return <AdminDashboard />;
   }
 
   return (
