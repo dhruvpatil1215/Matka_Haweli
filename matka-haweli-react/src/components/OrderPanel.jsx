@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useOrder } from '../context/OrderContext';
 import { useToast } from '../context/ToastContext';
@@ -11,21 +11,10 @@ export default function OrderPanel() {
   
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
-  const [orderType, setOrderType] = useState('dine_in'); // 'dine_in' or 'pickup'
-  const [tableNumber, setTableNumber] = useState('');
   const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Auto-detect table number from URL query parameter e.g., ?table=4
-  useEffect(() => {
-    if (!showOrder) return;
-    const params = new URLSearchParams(window.location.search);
-    const tableParam = params.get('table');
-    if (tableParam && parseInt(tableParam) >= 1 && parseInt(tableParam) <= 8) {
-      setTableNumber(`Table ${tableParam}`);
-      setOrderType('dine_in');
-    }
-  }, [showOrder]);
+
 
   if (!showOrder) return null;
 
@@ -42,10 +31,7 @@ export default function OrderPanel() {
       addToast('Please enter your phone number so we can confirm your order.', 'error');
       return;
     }
-    if (orderType === 'dine_in' && !tableNumber) {
-      addToast('Please select your table number.', 'error');
-      return;
-    }
+
 
     setSubmitting(true);
 
@@ -53,7 +39,7 @@ export default function OrderPanel() {
       // Create a readable summary of the items for the orders table notes column
       const itemsSummary = items.map(item => `• ${item.name} (x${item.qty})`).join('\n');
       const orderDetails = [
-        `Type: ${orderType === 'dine_in' ? `Dine In (${tableNumber})` : 'Takeaway / Parcel'}`,
+        `Type: Takeaway / Parcel`,
         `Phone: ${finalPhone}`
       ].join('\n');
 
@@ -96,13 +82,7 @@ export default function OrderPanel() {
       }
 
       // Success
-      addToast(
-        orderType === 'dine_in'
-          ? `Order placed for ${tableNumber}! We are preparing it.`
-          : 'Takeaway order placed successfully!',
-        'success',
-        6000
-      );
+      addToast('Takeaway order placed successfully!', 'success', 6000);
       
       // Reset state and close order panel
       clearOrder();
@@ -178,37 +158,7 @@ export default function OrderPanel() {
               onChange={(e) => setCustomerPhone(e.target.value)}
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="orderType">Order Type</label>
-            <select
-              id="orderType"
-              value={orderType}
-              onChange={(e) => {
-                setOrderType(e.target.value);
-                if (e.target.value === 'pickup') {
-                  setTableNumber('');
-                }
-              }}
-            >
-              <option value="dine_in">Dine In (Table)</option>
-              <option value="pickup">Takeaway / Parcel</option>
-            </select>
-          </div>
-          {orderType === 'dine_in' && (
-            <div className="form-group">
-              <label htmlFor="tableSelect">Table Number</label>
-              <select
-                id="tableSelect"
-                value={tableNumber}
-                onChange={(e) => setTableNumber(e.target.value)}
-              >
-                <option value="">Select Table</option>
-                {[...Array(8)].map((_, i) => (
-                  <option key={i+1} value={`Table ${i+1}`}>Table {i+1}</option>
-                ))}
-              </select>
-            </div>
-          )}
+
         </div>
 
         {/* Order items */}
