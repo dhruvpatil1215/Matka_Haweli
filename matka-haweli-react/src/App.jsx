@@ -55,9 +55,8 @@ function AppContent() {
   }
 
 if (isAdminRoute) {
-  return <h1>ADMIN WORKING</h1>;
+  return <AdminDashboard />;
 }
-
   return (
     <OrderProvider>
       <EmberParticles />
