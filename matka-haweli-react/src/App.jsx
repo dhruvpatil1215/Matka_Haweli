@@ -54,9 +54,9 @@ function AppContent() {
     return <LoadingScreen />;
   }
 
-  if (isAdminRoute) {
-    return <AdminDashboard />;
-  }
+if (isAdminRoute) {
+  return <h1>ADMIN WORKING</h1>;
+}
 
   return (
     <OrderProvider>
