@@ -178,7 +178,7 @@ export default function OrderHistoryModal() {
                 {/* Card Footer */}
                 <div className="history-card-footer">
                   <div className="history-order-type">
-                    Type: <strong className="capitalize">{order.order_type === 'dine_in' ? 'Dine In' : 'Takeaway'}</strong>
+                    Type: <strong className="capitalize">{order.order_type === 'dine-in' ? 'Dine In' : 'Takeaway'}</strong>
                   </div>
                   <div className="history-order-total">
                     Total: <strong className="text-fire">₹{order.total_amount}</strong>

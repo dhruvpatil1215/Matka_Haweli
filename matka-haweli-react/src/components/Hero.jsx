@@ -44,7 +44,7 @@ export default function Hero() {
       <div className="hero-content" ref={heroContentRef}>
         <div ref={est.ref} className={`hero-est ${est.className}`}>
           <span className="est-line"></span>
-          <span className="est-text">EST. 2014 — VIRAR WEST</span>
+          <span className="est-text">EST. 2025 — VIRAR WEST</span>
           <span className="est-line"></span>
         </div>
 

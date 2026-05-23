@@ -606,8 +606,21 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+
+.adm-order-type-tag.pickup {
   background: var(--adm-gold-dim);
   color: var(--adm-gold);
+}
+
+.adm-order-type-tag.dine-in {
+  background: var(--adm-fire-dim);
+  color: var(--adm-fire);
+}
+
+.adm-order-type-tag.table-tag {
+  background: var(--adm-blue-dim);
+  color: var(--adm-blue);
 }
 
 /* Order Items */

@@ -13,8 +13,8 @@ export default function OrderPanel() {
   const [customerPhone, setCustomerPhone] = useState('');
   const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
-
+  const [orderType, setOrderType] = useState('pickup');
+  const [tableNumber, setTableNumber] = useState('');
 
   if (!showOrder) return null;
 
@@ -31,7 +31,10 @@ export default function OrderPanel() {
       addToast('Please enter your phone number so we can confirm your order.', 'error');
       return;
     }
-
+    if (orderType === 'dine-in' && !tableNumber.trim()) {
+      addToast('Please enter your table number for Dine-In.', 'error');
+      return;
+    }
 
     setSubmitting(true);
 
@@ -39,7 +42,7 @@ export default function OrderPanel() {
       // Create a readable summary of the items for the orders table notes column
       const itemsSummary = items.map(item => `• ${item.name} (x${item.qty})`).join('\n');
       const orderDetails = [
-        `Type: Takeaway / Parcel`,
+        `Type: ${orderType === 'dine-in' ? `Dine-In (Table ${tableNumber.trim()})` : 'Takeaway / Parcel'}`,
         `Phone: ${finalPhone}`
       ].join('\n');
 
@@ -82,7 +85,13 @@ export default function OrderPanel() {
       }
 
       // Success
-      addToast('Takeaway order placed successfully!', 'success', 6000);
+      addToast(
+        orderType === 'dine-in'
+          ? 'Dine-In order placed successfully!'
+          : 'Takeaway order placed successfully!',
+        'success',
+        6000
+      );
       
       // Reset state and close order panel
       clearOrder();
@@ -90,7 +99,8 @@ export default function OrderPanel() {
       setCustomerName('');
       setCustomerPhone('');
       setNote('');
-      // Keep table number auto-detected for future orders
+      setTableNumber('');
+      setOrderType('pickup');
     } catch (err) {
       console.error('Error saving order to Supabase:', err);
       addToast(err.message || 'Failed to place order. Please try again.', 'error');
@@ -158,7 +168,35 @@ export default function OrderPanel() {
               onChange={(e) => setCustomerPhone(e.target.value)}
             />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="orderTypeSelect">Order Type</label>
+            <select
+              id="orderTypeSelect"
+              value={orderType}
+              onChange={(e) => setOrderType(e.target.value)}
+            >
+              <option value="pickup">Takeaway / Parcel</option>
+              <option value="dine-in">Dine-In (Eat Here)</option>
+            </select>
+          </div>
+          {orderType === 'dine-in' ? (
+            <div className="form-group">
+              <label htmlFor="tableNo">Table Number</label>
+              <input
+                type="number"
+                id="tableNo"
+                placeholder="Table No"
+                value={tableNumber}
+                onChange={(e) => setTableNumber(e.target.value)}
+                min="1"
+              />
+            </div>
+          ) : (
+            <div className="form-group" style={{ visibility: 'hidden' }}>
+              <label>&nbsp;</label>
+              <input type="text" disabled />
+            </div>
+          )}
         </div>
 
         {/* Order items */}

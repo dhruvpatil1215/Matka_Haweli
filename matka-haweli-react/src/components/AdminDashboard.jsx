@@ -32,6 +32,12 @@ function StatusBadge({ status }) {
   return <span className={`adm-status-badge ${s}`}>{STATUS_LABELS[status] || status}</span>;
 }
 
+function getTableNumber(notes) {
+  if (!notes) return '';
+  const match = notes.match(/Dine-In \(Table\s+([^)]+)\)/i);
+  return match ? match[1] : '';
+}
+
 /* ── Flame SVG ─────────────────────────────────────────── */
 function FlameSvg({ size = 32 }) {
   return (
@@ -290,13 +296,21 @@ export default function AdminDashboard() {
     fetchOrders(true);
     fetchReservations();
 
+    // Auto refresh orders every 2 seconds to ensure admin receives them immediately
+    const intervalId = setInterval(() => {
+      fetchOrders(false);
+    }, 2000);
+
     const sub = supabase
       .channel('admin-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders(false))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'reservations' }, () => fetchReservations())
       .subscribe();
 
-    return () => supabase.removeChannel(sub);
+    return () => {
+      clearInterval(intervalId);
+      supabase.removeChannel(sub);
+    };
   }, [authed, fetchOrders, fetchReservations]);
 
   /* Lazy-load sections */
@@ -769,7 +783,16 @@ export default function AdminDashboard() {
                         <div className="adm-order-customer">
                           <div className="adm-order-name">👤 {order.user_name}</div>
                           <div className="adm-order-phone">📞 {order.user_phone}</div>
-                          <span className="adm-order-type-tag">🛍️ Takeaway / Parcel</span>
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
+                            <span className={`adm-order-type-tag ${order.order_type || 'pickup'}`}>
+                              {order.order_type === 'dine-in' ? '🍽️ Dine-In' : '🛍️ Takeaway'}
+                            </span>
+                            {order.order_type === 'dine-in' && (
+                              <span className="adm-order-type-tag table-tag">
+                                🪑 Table {getTableNumber(order.notes) || 'N/A'}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         {/* Items */}
