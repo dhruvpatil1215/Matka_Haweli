@@ -18,8 +18,8 @@ export default function OrderHistoryModal() {
 
     let cancelled = false;
 
-    async function fetchOrders() {
-      setLoading(true);
+    async function fetchOrders(showLoader = true) {
+      if (showLoader) setLoading(true);
       setError(null);
       try {
         const { data, error: fetchErr } = await supabase
@@ -35,21 +35,39 @@ export default function OrderHistoryModal() {
         }
       } catch (err) {
         console.error('Error fetching order history:', err);
-        if (!cancelled) {
+        if (!cancelled && showLoader) {
           setError(err.message || 'Failed to load order history.');
           addToast('Could not fetch order history.', 'error');
         }
       } finally {
-        if (!cancelled) {
+        if (!cancelled && showLoader) {
           setLoading(false);
         }
       }
     }
 
-    fetchOrders();
+    fetchOrders(true);
+
+    // Subscribe to real-time status updates for this user's orders
+    const sub = supabase
+      .channel(`user-orders-${user.uid}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `user_id=eq.${user.uid}`
+        },
+        () => {
+          fetchOrders(false); // Refresh silently in the background
+        }
+      )
+      .subscribe();
 
     return () => {
       cancelled = true;
+      supabase.removeChannel(sub);
     };
   }, [showHistory, user, addToast]);
 
