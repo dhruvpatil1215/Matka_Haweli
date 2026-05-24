@@ -337,7 +337,8 @@ export default function AdminDashboard() {
         return updated;
       });
     } catch (e) {
-      addToast('Failed to update status', 'error');
+      console.error('Error updating order status:', e);
+      addToast(`Failed to update status: ${e.message || e.details || ''}`, 'error');
     } finally { setUpdatingId(null); }
   };
 
@@ -391,13 +392,21 @@ export default function AdminDashboard() {
   const deleteMenuItem = async (id) => {
     if (!window.confirm('Delete this item?')) return;
     const { error } = await supabase.from('menu_items').delete().eq('id', id);
-    if (error) { addToast('Delete failed', 'error'); return; }
+    if (error) { 
+      console.error('Error deleting menu item:', error);
+      addToast('Delete failed: ' + (error.message || ''), 'error'); 
+      return; 
+    }
     addToast('Item deleted', 'success');
     fetchMenu();
   };
   const toggleAvailable = async (item) => {
     const { error } = await supabase.from('menu_items').update({ is_available: !item.is_available }).eq('id', item.id);
-    if (error) { addToast('Update failed', 'error'); return; }
+    if (error) { 
+      console.error('Error toggling menu item availability:', error);
+      addToast('Update failed: ' + (error.message || ''), 'error'); 
+      return; 
+    }
     setMenuItems(prev => prev.map(m => m.id === item.id ? { ...m, is_available: !item.is_available } : m));
   };
 
@@ -407,7 +416,10 @@ export default function AdminDashboard() {
   const updateReservation = async (id, status) => {
     setResUpdating(id);
     const { error } = await supabase.from('reservations').update({ status }).eq('id', id);
-    if (error) { addToast('Update failed', 'error'); }
+    if (error) { 
+      console.error('Error updating reservation:', error);
+      addToast('Update failed: ' + (error.message || ''), 'error'); 
+    }
     else { addToast(`Reservation ${status}`, 'success'); fetchReservations(); }
     setResUpdating(null);
   };

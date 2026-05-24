@@ -32,44 +32,13 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const setupRecaptcha = (containerId) => {
-    try {
-      if (!auth) return null;
-      // If we already have a verifier instance, reuse it to avoid double-rendering error
-      if (window.recaptchaVerifier) {
-        return window.recaptchaVerifier;
-      }
-      const verifier = new RecaptchaVerifier(auth, containerId, {
-        size: 'invisible',
-        callback: () => {
-          // reCAPTCHA solved
-        }
-      });
-      window.recaptchaVerifier = verifier;
-      return verifier;
-    } catch (err) {
-      console.error('Error setting up RecaptchaVerifier:', err);
-      throw err;
-    }
-  };
-
-  const sendOtp = async (phoneNumber, verifier) => {
-    try {
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, verifier);
-      return confirmationResult;
-    } catch (err) {
-      console.error('Error sending OTP:', err);
-      throw err;
-    }
-  };
-
   const logout = async () => {
     await signOut(auth);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginWithGoogle, setupRecaptcha, sendOtp, logout }}>
+    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
