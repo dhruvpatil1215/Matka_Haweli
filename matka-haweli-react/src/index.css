@@ -2163,4 +2163,92 @@ blockquote{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:it
   }
 }
 
+/* OTP Verification Styles */
+.otp-btn-send {
+  background: var(--fire);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.otp-btn-send:hover {
+  background: var(--fire-red);
+  transform: translateY(-1px);
+}
+.otp-btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.otp-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #27ae60;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.otp-input-container {
+  margin-top: 10px;
+  background: rgba(212, 163, 73, 0.04);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  grid-column: 1 / -1;
+  animation: modalIn 0.3s ease;
+}
+.otp-input-field {
+  flex: 1;
+  text-align: center;
+  letter-spacing: 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  font-family: 'Outfit', sans-serif;
+}
+.otp-input-field:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(212,163,73,.08) !important;
+}
+.otp-btn-verify {
+  background: linear-gradient(135deg, var(--fire-red), var(--fire));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.otp-btn-verify:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232, 115, 26, 0.2);
+}
+.otp-btn-verify:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
 

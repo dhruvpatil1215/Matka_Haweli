@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useOrder } from '../context/OrderContext';
 import { useToast } from '../context/ToastContext';
@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 
 export default function OrderPanel() {
   const { showOrder, setShowOrder, items, removeItem, addItem, deleteItem, clearOrder, totalItems, totalPrice, setShowHistory } = useOrder();
-  const { user, logout } = useAuth();
+  const { user, logout, setupRecaptcha, sendOtp } = useAuth();
   const { addToast } = useToast();
   
   const [customerName, setCustomerName] = useState('');
@@ -16,9 +16,94 @@ export default function OrderPanel() {
   const [orderType, setOrderType] = useState('pickup');
   const [tableNumber, setTableNumber] = useState('');
 
+  // OTP related states
+  const [otpCode, setOtpCode] = useState('');
+  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+
+  // Cleanup recaptcha when component unmounts or modal closes
+  useEffect(() => {
+    return () => {
+      if (window.recaptchaVerifier) {
+        try {
+          window.recaptchaVerifier.clear();
+          window.recaptchaVerifier = null;
+        } catch (e) {
+          console.warn('Error clearing RecaptchaVerifier on cleanup:', e);
+        }
+      }
+    };
+  }, [showOrder]);
+
   if (!showOrder) return null;
 
   const displayName = customerName || user?.displayName || '';
+
+  const formatPhoneNumber = (phone) => {
+    let clean = phone.trim().replace(/\s+/g, '');
+    if (!clean.startsWith('+')) {
+      if (clean.length === 10) {
+        clean = '+91' + clean;
+      } else if (clean.length === 12 && clean.startsWith('91')) {
+        clean = '+' + clean;
+      }
+    }
+    return clean;
+  };
+
+  const handlePhoneChange = (e) => {
+    setCustomerPhone(e.target.value);
+    setIsPhoneVerified(false);
+    setConfirmationResult(null);
+    setOtpCode('');
+  };
+
+  const handleSendOtp = async () => {
+    const finalPhone = customerPhone.trim();
+    if (!finalPhone) {
+      addToast('Please enter your phone number to send OTP.', 'error');
+      return;
+    }
+    const formattedPhone = formatPhoneNumber(finalPhone);
+    // basic regex to check international formats
+    if (!/^\+[1-9]\d{1,14}$/.test(formattedPhone)) {
+      addToast('Please enter a valid phone number (e.g. +91 XXXXX XXXXX or a 10-digit mobile number).', 'error');
+      return;
+    }
+
+    setSendingOtp(true);
+    try {
+      const appVerifier = setupRecaptcha('recaptcha-container');
+      const result = await sendOtp(formattedPhone, appVerifier);
+      setConfirmationResult(result);
+      addToast('OTP sent successfully via SMS!', 'success');
+    } catch (err) {
+      console.error('Error sending OTP:', err);
+      addToast(err.message || 'Failed to send OTP. Please check your phone number.', 'error');
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otpCode.length !== 6) {
+      addToast('Please enter the 6-digit OTP code.', 'error');
+      return;
+    }
+    setVerifyingOtp(true);
+    try {
+      await confirmationResult.confirm(otpCode);
+      setIsPhoneVerified(true);
+      addToast('Phone number verified successfully!', 'success');
+    } catch (err) {
+      console.error('Error verifying OTP:', err);
+      addToast('Invalid OTP code. Please try again.', 'error');
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
 
   const handlePlaceOrder = async () => {
     const finalName = displayName.trim();
@@ -29,6 +114,10 @@ export default function OrderPanel() {
     const finalPhone = customerPhone.trim();
     if (!finalPhone) {
       addToast('Please enter your phone number so we can confirm your order.', 'error');
+      return;
+    }
+    if (!isPhoneVerified) {
+      addToast('Please verify your phone number via OTP first.', 'error');
       return;
     }
     if (orderType === 'dine-in' && !tableNumber.trim()) {
@@ -101,6 +190,11 @@ export default function OrderPanel() {
       setNote('');
       setTableNumber('');
       setOrderType('pickup');
+      
+      // Reset OTP verification states
+      setIsPhoneVerified(false);
+      setConfirmationResult(null);
+      setOtpCode('');
     } catch (err) {
       console.error('Error saving order to Supabase:', err);
       addToast(err.message || 'Failed to place order. Please try again.', 'error');
@@ -158,16 +252,76 @@ export default function OrderPanel() {
               onChange={(e) => setCustomerName(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{ gridColumn: '1 / -1' }}>
             <label htmlFor="custPhone">Phone Number</label>
-            <input
-              type="tel"
-              id="custPhone"
-              placeholder="+91 XXXXX XXXXX"
-              value={customerPhone}
-              onChange={(e) => setCustomerPhone(e.target.value)}
-            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input
+                type="tel"
+                id="custPhone"
+                placeholder="+91 XXXXX XXXXX or 10-digit number"
+                value={customerPhone}
+                onChange={handlePhoneChange}
+                disabled={isPhoneVerified || sendingOtp}
+                style={{ flex: 1 }}
+              />
+              {!isPhoneVerified && !confirmationResult && (
+                <button
+                  type="button"
+                  className="otp-btn-send"
+                  onClick={handleSendOtp}
+                  disabled={sendingOtp || !customerPhone.trim()}
+                >
+                  {sendingOtp ? 'Sending...' : 'Send OTP'}
+                </button>
+              )}
+              {isPhoneVerified && (
+                <span className="otp-verified-badge">
+                  ✓ Verified
+                </span>
+              )}
+            </div>
           </div>
+
+          {/* Invisible ReCAPTCHA Container */}
+          <div id="recaptcha-container"></div>
+
+          {/* OTP Code Entry Block */}
+          {!isPhoneVerified && confirmationResult && (
+            <div className="otp-input-container">
+              <label htmlFor="otpInput" style={{ display: 'block', fontSize: '0.7rem', fontWeight: 600, color: 'var(--gold)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                Enter 6-Digit OTP Code
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="text"
+                  id="otpInput"
+                  className="otp-input-field"
+                  placeholder="••••••"
+                  maxLength="6"
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                />
+                <button
+                  type="button"
+                  className="otp-btn-verify"
+                  onClick={handleVerifyOtp}
+                  disabled={verifyingOtp || otpCode.length !== 6}
+                >
+                  {verifyingOtp ? 'Verifying...' : 'Verify'}
+                </button>
+                <button
+                  type="button"
+                  className="otp-btn-send"
+                  onClick={handleSendOtp}
+                  disabled={sendingOtp}
+                  style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text2)' }}
+                  title="Resend OTP"
+                >
+                  Resend
+                </button>
+              </div>
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="orderTypeSelect">Order Type</label>
             <select
@@ -254,10 +408,15 @@ export default function OrderPanel() {
             <button
               className="btn-checkout"
               onClick={handlePlaceOrder}
-              disabled={submitting}
+              disabled={submitting || !isPhoneVerified}
+              style={!isPhoneVerified ? { background: 'linear-gradient(135deg, #7f8c8d, #95a5a6)', boxShadow: 'none', cursor: 'not-allowed' } : {}}
             >
               {submitting ? (
                 <>Placing Order...</>
+              ) : !isPhoneVerified ? (
+                <>
+                  <span>Verify Phone to Order</span>
+                </>
               ) : (
                 <>
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: '6px' }}>
