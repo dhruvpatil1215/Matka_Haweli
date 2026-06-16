@@ -740,6 +740,16 @@
   background: rgba(52,152,219,0.25);
 }
 
+.adm-contact-btn.print {
+  background: var(--adm-gold-dim);
+  color: var(--adm-gold);
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+.adm-contact-btn.print:hover {
+  background: rgba(201,168,76,0.25);
+}
+
 /* Status Action Buttons */
 .adm-order-actions {
   padding: 10px 14px 14px;

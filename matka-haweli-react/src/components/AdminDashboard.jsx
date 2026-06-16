@@ -371,9 +371,11 @@ export default function AdminDashboard() {
         category_id: menuForm.category_id || null,
         price: menuForm.price.trim(),
         description: menuForm.description.trim() || null,
-        image_url: menuForm.image_url.trim() || null,
         is_available: menuForm.is_available,
       };
+      if (menuForm.image_url && menuForm.image_url.trim()) {
+        payload.image_url = menuForm.image_url.trim();
+      }
       if (menuModal === 'add') {
         const { error } = await supabase.from('menu_items').insert(payload);
         if (error) throw error;
@@ -495,6 +497,201 @@ export default function AdminDashboard() {
       addToast('Settings saved!', 'success');
     } catch (e) { addToast('Save failed', 'error'); }
     finally { setSettingsSaving(false); }
+  };
+
+  /* ════════════════════════════════════════════════════════
+     PRINT RECEIPT
+     ════════════════════════════════════════════════════════ */
+  const printReceipt = (order) => {
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.width = '0px';
+    iframe.style.height = '0px';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    
+    const itemsHtml = (order.order_items || []).map(item => {
+      const qty = item.quantity;
+      const name = item.item_name;
+      const price = Number(String(item.item_price).replace(/[^\d.]/g,''));
+      const total = (price * qty).toFixed(0);
+      return `
+        <tr>
+          <td style="text-align: left; padding: 4px 0; vertical-align: top;">${name}</td>
+          <td style="text-align: center; padding: 4px 0; vertical-align: top;">${qty}</td>
+          <td style="text-align: right; padding: 4px 0; vertical-align: top;">₹${total}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const orderTypeStr = order.order_type === 'dine-in' 
+      ? `Dine-In (Table ${getTableNumber(order.notes) || 'N/A'})` 
+      : 'Takeaway';
+
+    const receiptHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Receipt - #${order.id.slice(0, 8)}</title>
+        <style>
+          @media print {
+            @page {
+              margin: 0;
+              size: auto;
+            }
+            body {
+              margin: 10mm;
+            }
+          }
+          body {
+            font-family: 'Courier New', Courier, monospace;
+            color: #000;
+            background: #fff;
+            font-size: 13px;
+            line-height: 1.4;
+            width: 80mm; /* Standard thermal receipt width */
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 15px;
+          }
+          .restaurant-name {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+          }
+          .restaurant-info {
+            font-size: 11px;
+            margin-bottom: 2px;
+          }
+          .divider {
+            border-top: 1px dashed #000;
+            margin: 10px 0;
+          }
+          .title {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin: 5px 0;
+            letter-spacing: 2px;
+          }
+          .meta-table {
+            width: 100%;
+            font-size: 11px;
+            margin-bottom: 10px;
+          }
+          .meta-table td {
+            padding: 2px 0;
+          }
+          .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+          }
+          .items-table th {
+            border-bottom: 1px dashed #000;
+            border-top: 1px dashed #000;
+            padding: 5px 0;
+            font-weight: bold;
+          }
+          .items-table td {
+            padding: 5px 0;
+          }
+          .total-section {
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+            border-top: 1px dashed #000;
+            padding-top: 8px;
+          }
+          .total-section td {
+            padding: 2px 0;
+          }
+          .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 11px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="restaurant-name">${settings.restaurant_name || 'Matka Haweli'}</div>
+          <div class="restaurant-info">${settings.address || 'Main Road, Virar West, Maharashtra 401303'}</div>
+          <div class="restaurant-info">Phone: ${settings.phone || '+91 70118 22978'}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="title">ORDER RECEIPT</div>
+        <div class="divider"></div>
+        <table class="meta-table">
+          <tr>
+            <td style="font-weight: bold; width: 40%;">Order ID:</td>
+            <td>#${order.id.slice(0, 8).toUpperCase()}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold;">Date/Time:</td>
+            <td>${fmtDateTime(order.created_at)}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold;">Customer:</td>
+            <td>${order.user_name}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold;">Mobile:</td>
+            <td>${order.user_phone}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold;">Order Type:</td>
+            <td>${orderTypeStr}</td>
+          </tr>
+        </table>
+        
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th style="text-align: left;">Item</th>
+              <th style="text-align: center; width: 40px;">Qty</th>
+              <th style="text-align: right; width: 70px;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+        
+        <table class="total-section">
+          <tr>
+            <td style="text-align: left;">GRAND TOTAL</td>
+            <td style="text-align: right;">₹${order.total_amount}</td>
+          </tr>
+        </table>
+        
+        <div class="footer">
+          <div>Thank You! Visit Again.</div>
+          <div style="font-size: 9px; margin-top: 5px; color: #555;">Matka Haweli Restaurant App</div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    doc.open();
+    doc.write(receiptHtml);
+    doc.close();
+
+    iframe.contentWindow.focus();
+    setTimeout(() => {
+      iframe.contentWindow.print();
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 1000);
+    }, 500);
   };
 
   /* ════════════════════════════════════════════════════════
@@ -845,6 +1042,12 @@ export default function AdminDashboard() {
                               target="_blank" rel="noreferrer"
                             >💬 WA</a>
                             <a className="adm-contact-btn call" href={`tel:${order.user_phone}`}>📞 Call</a>
+                            <button
+                              className="adm-contact-btn print"
+                              onClick={() => printReceipt(order)}
+                            >
+                              🖨️ Print
+                            </button>
                           </div>
                         </div>
 
@@ -860,7 +1063,7 @@ export default function AdminDashboard() {
                             <button className="adm-action-btn ready" disabled={updatingId === order.id} onClick={() => updateOrderStatus(order.id, 'ready')}>✅ Mark Ready</button>
                           )}
                           {order.status === 'ready' && (
-                            <button className="adm-action-btn completed" disabled={updatingId === order.id} onClick={() => updateOrderStatus(order.id, 'completed')}>🎉 Complete</button>
+                            <button className="adm-action-btn completed" disabled={updatingId === order.id} onClick={() => updateOrderStatus(order.id, 'delivered')}>🎉 Complete</button>
                           )}
                           {/* Override dropdown */}
                           <select
@@ -873,7 +1076,7 @@ export default function AdminDashboard() {
                             <option value="pending">Pending</option>
                             <option value="preparing">Preparing</option>
                             <option value="ready">Ready</option>
-                            <option value="completed">Completed</option>
+                            <option value="delivered">Completed</option>
                             <option value="cancelled">Cancelled</option>
                           </select>
                         </div>

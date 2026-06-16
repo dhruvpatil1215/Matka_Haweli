@@ -4,6 +4,16 @@ import { useOrder } from '../context/OrderContext';
 import { useToast } from '../context/ToastContext';
 import { useMenuData } from '../hooks/useMenuData';
 
+/* ── Non-veg keyword detection ── */
+const NON_VEG_KEYWORDS = [
+  'chicken','mutton','fish','anda','egg','omelette','burji','prawn','surmai',
+  'paplet','bangda','bombil','kombdi','kalegi','pota','kebsa','biryani'
+];
+function isNonVeg(name) {
+  const lower = name.toLowerCase();
+  return NON_VEG_KEYWORDS.some(k => lower.includes(k));
+}
+
 const STATIC_MENU_DATA = {
   vadapav: { icon: '🍔', title: 'Vadapav', items: [
     ['Regular Vadapav','₹20'],['Chura Pav','₹15'],['Cheese Vadapav','₹40'],
@@ -202,14 +212,76 @@ function MenuSkeleton() {
   );
 }
 
+/* ── Veg / Non-veg dot indicator (FSSAI standard) ── */
+function FoodTypeDot({ name }) {
+  const nonVeg = isNonVeg(name);
+  return (
+    <span
+      className={`food-dot ${nonVeg ? 'food-dot--nonveg' : 'food-dot--veg'}`}
+      title={nonVeg ? 'Non-Vegetarian' : 'Vegetarian'}
+      aria-label={nonVeg ? 'Non-veg' : 'Veg'}
+    />
+  );
+}
+
+/* ── helpers ── */
+function parseDualPrice(price) {
+  // Matches patterns like ₹70/120 or ₹90/150
+  const m = String(price).match(/₹?(\d+)\s*\/\s*(\d+)/);
+  if (!m) return null;
+  return { half: `₹${m[1]}`, full: `₹${m[2]}` };
+}
+
+/* ── Size picker popup for dual-price items ── */
+function SizePicker({ name, dual, onPick, onClose }) {
+  return (
+    <div className="size-picker-backdrop" onClick={onClose}>
+      <div className="size-picker" onClick={e => e.stopPropagation()}>
+        <p className="size-picker-title">Choose Size</p>
+        <div className="size-picker-options">
+          <button
+            className="size-picker-btn"
+            onClick={() => onPick(`${name} (Half)`, dual.half)}
+          >
+            <span className="size-label">Half</span>
+            <span className="size-price">{dual.half}</span>
+          </button>
+          <button
+            className="size-picker-btn size-picker-btn--full"
+            onClick={() => onPick(`${name} (Full)`, dual.full)}
+          >
+            <span className="size-label">Full</span>
+            <span className="size-price">{dual.full}</span>
+          </button>
+        </div>
+        <button className="size-picker-cancel" onClick={onClose}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
 function AddButton({ name, price }) {
   const { addItem, removeItem, items } = useOrder();
   const { addToast } = useToast();
   const [pop, setPop] = useState(false);
-  const qty = items.find(i => i.name === name)?.qty || 0;
+  const [showPicker, setShowPicker] = useState(false);
+
+  const dual = parseDualPrice(price);
+
+  // Count all variants of this item (Half + Full combined)
+  const allVariants = items.filter(i =>
+    i.name === name || i.name === `${name} (Half)` || i.name === `${name} (Full)`
+  );
+  const qty = dual
+    ? allVariants.reduce((s, i) => s + i.qty, 0)
+    : (items.find(i => i.name === name)?.qty || 0);
 
   const handleAdd = (e) => {
     e.stopPropagation();
+    if (dual) { 
+      setShowPicker(true); 
+      return; 
+    }
     addItem(name, price);
     setPop(true);
     setTimeout(() => setPop(false), 400);
@@ -218,26 +290,49 @@ function AddButton({ name, price }) {
 
   const handleRemove = (e) => {
     e.stopPropagation();
+    if (dual) {
+      // Remove from the last added variant
+      const last = [...allVariants].reverse()[0];
+      if (last) removeItem(last.name);
+      return;
+    }
     removeItem(name);
     if (qty <= 1) addToast(`Removed ${name}`, 'error', 1500);
   };
 
-  if (qty > 0) {
-    return (
-      <div className="mi-qty-controls" onClick={(e) => e.stopPropagation()}>
-        <button className="mi-qty-btn mi-qty-minus" onClick={handleRemove}>−</button>
-        <span className="mi-qty-count">{qty}</span>
-        <button className={`mi-qty-btn mi-qty-plus${pop ? ' pop' : ''}`} onClick={handleAdd}>+</button>
-      </div>
-    );
-  }
+  const handlePick = (variantName, variantPrice) => {
+    setShowPicker(false);
+    addItem(variantName, variantPrice);
+    setPop(true);
+    setTimeout(() => setPop(false), 400);
+    addToast(`Added! ${variantName}`, 'success', 1500);
+  };
 
   return (
-    <button className={`mi-add-btn${pop ? ' pop' : ''}`} onClick={handleAdd} title="Add to order">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5">
-        <path d="M12 5v14M5 12h14" />
-      </svg>
-    </button>
+    <>
+      {showPicker && (
+        <SizePicker
+          name={name}
+          dual={dual}
+          onPick={handlePick}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
+
+      {qty > 0 ? (
+        <div className="mi-qty-controls" onClick={(e) => e.stopPropagation()}>
+          <button className="mi-qty-btn mi-qty-minus" onClick={handleRemove}>−</button>
+          <span className="mi-qty-count">{qty}</span>
+          <button className={`mi-qty-btn mi-qty-plus${pop ? ' pop' : ''}`} onClick={handleAdd}>+</button>
+        </div>
+      ) : (
+        <button className={`mi-add-btn${pop ? ' pop' : ''}`} onClick={handleAdd} title="Add to order">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </button>
+      )}
+    </>
   );
 }
 
@@ -269,6 +364,7 @@ function MenuCategory({ data }) {
       <div className="cat-items" ref={itemsRef}>
         {data.items.map(([name, price]) => (
           <div className="mi" key={name}>
+            <FoodTypeDot name={name} />
             <div className="mi-info">
               <span className="mi-name">{name}</span>
               <span className="mi-price">{price}</span>
@@ -438,6 +534,7 @@ export default function Menu() {
                   <div className="cat-items">
                     {searchResults.map(([name, price]) => (
                       <div className="mi" key={name}>
+                        <FoodTypeDot name={name} />
                         <div className="mi-info">
                           <span className="mi-name">{name}</span>
                           <span className="mi-price">{price}</span>
